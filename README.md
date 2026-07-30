@@ -59,7 +59,7 @@ The main notebooks are organized as follows:
 
 ## Methodology
 
-This section describes the individual components of the proposed pipeline. The metadata model, image models, and stacking strategy are presented separately, highlighting the role of each component within the multimodal ensemble.
+The proposed solution is composed of three complementary components: a metadata classifier, image-based deep learning models, and a stacking ensemble that combines their predictions. The following subsections describe each component and its role within the final multimodal pipeline.
 
 ### Metadata Model
 
@@ -75,7 +75,7 @@ Model development follows a two-stage training strategy. First, each architectur
 
 The resulting image classifiers capture visual characteristics of skin lesions that complement the information available in the patient metadata.
 
-### Multimodal Stacking
+### Stacking Ensemble
 
 The final prediction is obtained by combining the outputs of the three base models through a **Logistic Regression** stacking ensemble.
 
