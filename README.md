@@ -59,15 +59,7 @@ The main notebooks are organized as follows:
 
 ## Methodology
 
-The proposed solution adopts a multimodal ensemble strategy that combines complementary sources of information available in the ISIC 2024 dataset. Independent models are trained on patient metadata and dermoscopic images, and their predictions are subsequently combined through a Logistic Regression stacking model.
-
-Each component of the pipeline is developed and evaluated independently before being integrated into the final ensemble. This modular approach simplifies experimentation while allowing each model to exploit the strengths of its respective data modality.
-
-The methodology is composed of three main stages:
-
-1. Metadata classification using CatBoost.
-2. Image classification using convolutional neural networks.
-3. Multimodal prediction fusion through Logistic Regression stacking.
+This section describes the individual components of the proposed pipeline. The metadata model, image models, and stacking strategy are presented separately, highlighting the role of each component within the multimodal ensemble.
 
 ### Metadata Model
 
@@ -91,172 +83,85 @@ Out-of-Fold predictions generated during cross-validation are used as training d
 
 During inference, prediction probabilities from the final CatBoost, ResNet18, and EfficientNet-B0 models are passed to the trained Logistic Regression model, which produces the final malignancy probability submitted to the competition.
 
-This multimodal strategy consistently outperformed each individual model as well as a simple weighted-average ensemble, demonstrating the benefit of learning an optimal combination of metadata-based and image-based predictions. TODO: Continue the readme from here
-
----
-## Project Overview
-
-Early detection of skin cancer is critical for improving patient outcomes. The ISIC 2024 challenge focuses on predicting whether a skin lesion is malignant by leveraging dermoscopic images and patient metadata.
-
-This repository presents a multimodal ensemble approach composed of:
-
-* **ResNet18** trained on dermoscopic images.
-* **EfficientNet-B0** trained on dermoscopic images.
-* **CatBoost** trained on patient and lesion metadata.
-* **Logistic Regression** stacking to combine the predictions of the three base models.
-
-The project was implemented using **PyTorch**, **CatBoost**, and **scikit-learn**.
-
----
-
-## Features
-
-- Metadata classification using CatBoost
-- Image classification using ResNet18
-- Image classification using EfficientNet-B0
-- Five-fold Stratified Group Cross Validation
-- Logistic Regression stacking
-- Fully reproducible training and inference pipeline
-- Modular notebook organization
-
----
-
-## Pipeline
-
-<img width="1310" height="1138" alt="pipeline" src="https://github.com/user-attachments/assets/78101c78-4903-4cb8-a9ca-0ca2d4963bad" />
-
-
-## Repository Structure
-
-<img width="624" height="1024" alt="structure" src="https://github.com/user-attachments/assets/62aafb1c-438c-4dae-85a6-b525d298b191" />
-
----
-
-## Project Structure
-
-```text
-.
-├── notebooks/          # Training and experimentation notebooks
-├── src/                # Dataset, models and utility modules
-├── figures/            # Figures used in the README and presentation
-├── docs/               # Project documentation
-├── requirements.txt
-└── README.md
-```
-
----
-
-## Methodology
-
-### Image Models
-
-Two convolutional neural networks were trained independently using dermoscopic images:
-
-* ResNet18
-* EfficientNet-B0
-
-Both models produce the probability of malignancy for each lesion.
-
-### Metadata Model
-
-A CatBoost classifier was trained using the tabular metadata provided by the competition, including demographic and lesion-related attributes.
-
-### Stacking Ensemble
-
-The final prediction is obtained by combining the outputs of the three base models using a Logistic Regression meta-model trained on out-of-fold predictions.
-
-```text
-Dermoscopic Images
-        │
- ┌──────┴────────┐
- │               │
-ResNet18   EfficientNet-B0
- │               │
- └──────┬────────┘
-        │
-Patient Metadata
-        │
-     CatBoost
-        │
-        ▼
- Three Prediction Scores
-        │
-        ▼
- Logistic Regression
-        │
-        ▼
- Final Malignancy Probability
-```
-
----
+This multimodal strategy consistently outperformed each individual model as well as a simple weighted-average ensemble, demonstrating the benefit of learning an optimal combination of metadata-based and image-based predictions.
 
 ## Results
 
-| Model                        |   OOF pAUC |
-| ---------------------------- | ---------: |
-| ResNet18                     |     0.8109 |
-| EfficientNet-B0              |     0.8462 |
-| CatBoost                     |     0.8609 |
-| Weighted Average Ensemble    |     0.8773 |
-| Logistic Regression Stacking | **0.8844** |
+Model performance was evaluated using the official **ISIC 2024 competition metric (competition pAUC)** computed from Out-of-Fold predictions generated during five-fold Stratified Group Cross-Validation.
 
-The stacking approach achieved the best overall performance, outperforming every individual model and the weighted-average ensemble.
+The comparison below summarizes the performance of the individual models, a simple weighted-average ensemble, and the proposed Logistic Regression stacking approach.
 
----
+<p align="center">
+  <img src="figures/model_comparison.png" alt="Model Comparison" width="700">
+</p>
+
+| Model                          |      ROC-AUC | Competition pAUC |
+| :----------------------------- | -----------: | ---------------: |
+| Logistic Regression (Stacking) | **0.942497** |     **0.156071** |
+| Weighted Average               |     0.940503 |         0.154647 |
+| CatBoost                       |     0.926005 |         0.142540 |
+| EfficientNet-B0                |     0.914196 |         0.135148 |
+| ResNet18                       |     0.894274 |         0.123782 |
+
+The multimodal Logistic Regression stacker achieved the best overall performance, outperforming both the individual models and the weighted-average ensemble. These results demonstrate that image-based and metadata-based classifiers provide complementary information and that learning an optimal combination of their predictions leads to a measurable improvement over simpler ensemble strategies.
+
+### Kaggle Leaderboard
+
+The final submission achieved the following scores on the ISIC 2024 Kaggle leaderboard:
+
+| Leaderboard | Competition pAUC |
+|-------------|-----------------:|
+| Public | 0.16808 |
+| Private | 0.15407 |
 
 ## Installation
 
 Clone the repository:
 
 ```bash
-git clone https://github.com/<your-username>/isic2024-skin-cancer-detection.git
-cd isic2024-skin-cancer-detection
+git clone https://github.com/<your-username>/ISIC2024-Skin-Cancer-Detection.git
+cd ISIC2024-Skin-Cancer-Detection
 ```
 
-Install the required packages:
+Create a Python environment and install the required dependencies:
 
 ```bash
+python -m venv .venv
+source .venv/bin/activate      # Linux / macOS
+
 pip install -r requirements.txt
 ```
 
----
+The project was developed using **Python 3.12**, **PyTorch**, **CatBoost**, and **scikit-learn**.
 
-## Dataset
+## Usage
 
-The dataset is provided by the ISIC 2024 Kaggle competition and is **not** included in this repository.
+The notebooks are designed to be executed independently and document each stage of the machine learning pipeline.
 
-Competition page:
+Before running a notebook, update the dataset, model, and output paths defined in the **Configuration** section to match your local environment or Kaggle workspace. Once the paths are configured, each notebook can be executed sequentially to reproduce the corresponding stage of the project.
 
-https://www.kaggle.com/competitions/isic-2024-challenge
+The project was primarily developed and evaluated in the Kaggle Notebook environment. Running the notebooks locally may require adjusting file paths and installing the listed dependencies.
 
----
+## Future Work
 
-## Technologies
+Several improvements could be explored to further enhance the proposed multimodal pipeline:
 
-* Python
-* PyTorch
-* CatBoost
-* scikit-learn
-* pandas
-* NumPy
-* OpenCV
-* timm
-* Kaggle Notebooks
+* **Evaluate additional image architectures**, such as ConvNeXt, Vision Transformers (ViT), or more recent EfficientNet variants.
+* **Investigate additional metadata models**, including XGBoost and LightGBM, to increase model diversity within the ensemble.
+* **Train multiple models with different random seeds** and average their predictions to improve robustness and reduce prediction variance.
+* **Explore more expressive stacking models**, such as gradient boosting methods or shallow neural networks, while carefully controlling overfitting.
+* **Perform systematic hyperparameter optimization** for both the image models and the stacking strategy using automated search techniques.
 
----
+Although these directions were beyond the scope of the current project, they represent promising opportunities for improving predictive performance and further exploring multimodal learning for skin lesion classification.
 
-## Future Improvements
+## Acknowledgments
 
-Potential directions for future work include:
+This project was developed using the dataset and evaluation protocol provided by the **ISIC 2024 – Skin Cancer Detection with 3D-TBP** challenge, hosted on **Kaggle**.
 
-* Training larger image backbones (EfficientNetV2, ConvNeXt, ViT).
-* Advanced test-time augmentation (TTA).
-* Additional metadata feature engineering.
-* More sophisticated stacking and blending strategies.
-* Probability calibration for the ensemble.
-
----
+The challenge organizers and the International Skin Imaging Collaboration (ISIC) are gratefully acknowledged for making the dataset and competition resources publicly available, enabling research and experimentation in automated skin lesion classification assist.
 
 ## License
+
+This project is released under the **MIT License**. See the `LICENSE` file for additional information.
 
 This project is released for educational and research purposes.
