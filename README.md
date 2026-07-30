@@ -65,7 +65,7 @@ The proposed solution is composed of three complementary components: a metadata 
 
 Patient metadata and lesion descriptors are modeled using **CatBoost**, a gradient boosting algorithm particularly well suited for heterogeneous tabular datasets containing both numerical and categorical variables.
 
-The metadata preprocessing pipeline includes feature engineering, categorical feature handling, and the generation of Out-of-Fold predictions through five-fold Stratified Group Cross-Validation. After validating the selected hyperparameters, a final CatBoost model is retrained using the complete metadata dataset and later used during inference.
+The metadata preprocessing pipeline includes feature engineering, categorical feature handling, and the generation of Out-of-Fold predictions through five-fold Stratified Group Cross-Validation. After validating the selected hyperparameters, two inference strategies were evaluated: a single CatBoost model retrained on the complete dataset and an ensemble of the five cross-validation models. The ensemble consistently achieved superior leaderboard performance and was therefore adopted for the final competition submission.
 
 ### Image Models
 
@@ -84,6 +84,12 @@ Out-of-Fold predictions generated during cross-validation are used as training d
 During inference, prediction probabilities from the final CatBoost, ResNet18, and EfficientNet-B0 models are passed to the trained Logistic Regression model, which produces the final malignancy probability submitted to the competition.
 
 This multimodal strategy consistently outperformed each individual model as well as a simple weighted-average ensemble, demonstrating the benefit of learning an optimal combination of metadata-based and image-based predictions.
+
+### Alternative Stacking Approaches
+
+In addition to the Logistic Regression meta-model, a shallow feedforward neural network was also evaluated as a stacking strategy. The network consisted of multiple fully connected hidden layers with ReLU activations and dropout regularization, and several architectures with different numbers of hidden layers and dropout configurations were explored.
+
+Despite these experiments, the neural network consistently underperformed the Logistic Regression stacker during cross-validation while introducing additional complexity and hyperparameter tuning. Consequently, Logistic Regression was selected as the final meta-model due to its superior performance, simplicity, and robustness.
 
 ## Results
 
