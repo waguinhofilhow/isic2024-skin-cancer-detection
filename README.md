@@ -119,7 +119,7 @@ The final submission achieved the following scores on the ISIC 2024 Kaggle leade
 Clone the repository:
 
 ```bash
-git clone https://github.com/<your-username>/ISIC2024-Skin-Cancer-Detection.git
+git clone https://github.com/waguinhofilhow/ISIC2024-Skin-Cancer-Detection.git
 cd ISIC2024-Skin-Cancer-Detection
 ```
 
