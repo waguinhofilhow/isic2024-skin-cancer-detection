@@ -101,14 +101,6 @@ The comparison below summarizes the performance of the individual models, a simp
   <img src="figures/model_comparison.png" alt="Model Comparison" width="700">
 </p>
 
-| Model                          |      ROC-AUC | Competition pAUC |
-| :----------------------------- | -----------: | ---------------: |
-| Logistic Regression (Stacking) | **0.942497** |     **0.156071** |
-| Weighted Average               |     0.940503 |         0.154647 |
-| CatBoost                       |     0.926005 |         0.142540 |
-| EfficientNet-B0                |     0.914196 |         0.135148 |
-| ResNet18                       |     0.894274 |         0.123782 |
-
 The multimodal Logistic Regression stacker achieved the best overall performance, outperforming both the individual models and the weighted-average ensemble. These results demonstrate that image-based and metadata-based classifiers provide complementary information and that learning an optimal combination of their predictions leads to a measurable improvement over simpler ensemble strategies.
 
 ### Kaggle Leaderboard
