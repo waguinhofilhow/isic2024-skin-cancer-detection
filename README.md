@@ -33,7 +33,7 @@ Finally, the predictions produced by the three base models are standardized and 
 The complete workflow is illustrated below.
 
 <p align="center">
-  <img src="figures/pipeline_overview.png" alt="Pipeline Overview" width="700">
+  <img src="figures/pipeline_overview.png" alt="Pipeline Overview" width="800">
 </p>
 
 ## Repository Structure
@@ -43,7 +43,7 @@ The repository is organized as a sequence of independent notebooks, each respons
 The overall repository organization is illustrated below.
 
 <p align="center">
-  <img src="figures/repository_structure.png" alt="Repository Structure" width="700">
+  <img src="figures/repository_structure.png" alt="Repository Structure" width="500">
 </p>
 
 The main notebooks are organized as follows:
