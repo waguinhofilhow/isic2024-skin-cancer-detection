@@ -43,7 +43,7 @@ The repository is organized as a sequence of independent notebooks, each respons
 The overall repository organization is illustrated below.
 
 <p align="center">
-  <img src="figures/repository_structure.png" alt="Repository Structure" width="300">
+  <img src="figures/repository_structure.png" alt="Repository Structure" width="400">
 </p>
 
 The main notebooks are organized as follows:
